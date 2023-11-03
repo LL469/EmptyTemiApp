@@ -81,6 +81,7 @@ class MainActivity : AppCompatActivity(), OnRequestPermissionResultListener, OnS
     }
 
     override fun onSdkError(sdkException: SdkException) {
+        speak("Error")
     }
 
     override fun onRequestPermissionResult(
@@ -98,24 +99,6 @@ class MainActivity : AppCompatActivity(), OnRequestPermissionResultListener, OnS
         val sentenceString = sentence?.toString() ?: ""
         robot.speak(create(sentenceString, false, TtsRequest.Language.SYSTEM, true, false))
     }
-
-
-
-
-    fun a(places: List<String>) {
-        robot.patrol(locations = places, times = 2, nonstop = false, waiting = 3 )
-    }
-
-    fun b(place: String) {
-        robot.goTo(location = place, backwards = null, noBypass = null, speedLevel = null)
-    }
-
-
-
-    //https://github.com/robotemi/sdk/wiki/Locations    map
-
-    //https://github.com/robotemi/sdk/wiki/Movement     manual movement
-
 
 
 }
