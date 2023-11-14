@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.robotemi.sdk.*
 import com.robotemi.sdk.Robot.*
 import com.robotemi.sdk.Robot.Companion.getInstance
@@ -45,6 +46,9 @@ class MainActivity : AppCompatActivity(), OnRequestPermissionResultListener, OnS
     private lateinit var places: List<String>
     private lateinit var robot: Robot
 
+
+    // ACTIVITY STATES
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -76,6 +80,8 @@ class MainActivity : AppCompatActivity(), OnRequestPermissionResultListener, OnS
         super.onDestroy()
     }
 
+    // LISTENERS
+
     override fun onRobotReady(isReady: Boolean) {
         places = robot.locations
     }
@@ -95,10 +101,15 @@ class MainActivity : AppCompatActivity(), OnRequestPermissionResultListener, OnS
         places = robot.locations
     }
 
+    // FUNCTIONS
+
     fun speak(sentence: Any?) {
         val sentenceString = sentence?.toString() ?: ""
         robot.speak(create(sentenceString, false, TtsRequest.Language.SYSTEM, true, false))
     }
 
+    fun shortToast(message: String){
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 
 }
