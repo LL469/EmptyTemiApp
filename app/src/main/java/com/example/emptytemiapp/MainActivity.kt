@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import com.robotemi.sdk.*
 import com.robotemi.sdk.Robot.*
@@ -41,11 +42,12 @@ import com.robotemi.sdk.telepresence.Participant
 import com.robotemi.sdk.voice.ITtsService
 import com.robotemi.sdk.voice.model.TtsVoice
 
-class MainActivity : AppCompatActivity(), OnRequestPermissionResultListener, OnSdkExceptionListener, OnRobotReadyListener, OnLocationsUpdatedListener {
+class MainActivity : AppCompatActivity(), OnRequestPermissionResultListener, OnSdkExceptionListener, OnRobotReadyListener, OnLocationsUpdatedListener, OnGreetModeStateChangedListener {
 
     private lateinit var places: List<String>
     private lateinit var robot: Robot
 
+    private lateinit var text1: TextView
 
     // ACTIVITY STATES
 
@@ -57,6 +59,8 @@ class MainActivity : AppCompatActivity(), OnRequestPermissionResultListener, OnS
 
         robot.addOnRequestPermissionResultListener(this)
         robot.addOnSdkExceptionListener(this)
+
+        text1 = findViewById<TextView>(R.id.text1)
     }
 
     override fun onStart() {
@@ -64,6 +68,7 @@ class MainActivity : AppCompatActivity(), OnRequestPermissionResultListener, OnS
         robot.showTopBar()
         robot.addOnRobotReadyListener(this)
         robot.addOnLocationsUpdatedListener(this)
+        robot.addOnGreetModeStateChangedListener(this)
 
     }
 
@@ -71,6 +76,7 @@ class MainActivity : AppCompatActivity(), OnRequestPermissionResultListener, OnS
 
         robot.removeOnLocationsUpdateListener(this)
         robot.removeOnRobotReadyListener(this)
+        robot.removeOnGreetModeStateChangedListener(this)
         super.onStop()
     }
 
@@ -111,5 +117,36 @@ class MainActivity : AppCompatActivity(), OnRequestPermissionResultListener, OnS
     fun shortToast(message: String){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+
+    override fun onGreetModeStateChanged(state: Int) {
+        var greet: String = when(state) {
+            0 -> {
+                "IDLE"
+            }
+            1 -> {
+                "SEARCHING"
+            }
+            2 -> {
+                "PREPARING"
+            }
+            3 -> {
+                "GREETING"
+            }
+            4 -> {
+                "INTERACTION"
+            }
+            5 -> {
+                "POST_INTERACTION"
+            }
+            -1 -> {
+                "ERROR"
+            } else -> {
+                ""
+            }
+        }
+        text1.text = greet
+        Log.d("test", "$greet")
+    }
+
 
 }
