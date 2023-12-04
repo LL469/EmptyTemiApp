@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity(), OnRequestPermissionResultListener, OnS
 
 
     // ACTIVITY STATES
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -81,7 +80,6 @@ class MainActivity : AppCompatActivity(), OnRequestPermissionResultListener, OnS
     }
 
     // LISTENERS
-
     override fun onRobotReady(isReady: Boolean) {
         places = robot.locations
     }
@@ -102,7 +100,6 @@ class MainActivity : AppCompatActivity(), OnRequestPermissionResultListener, OnS
     }
 
     // FUNCTIONS
-
     fun speak(sentence: Any?) {
         val sentenceString = sentence?.toString() ?: ""
         robot.speak(create(sentenceString, false, TtsRequest.Language.SYSTEM, true, false))
@@ -110,6 +107,23 @@ class MainActivity : AppCompatActivity(), OnRequestPermissionResultListener, OnS
 
     fun shortToast(message: String){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    fun log(tag:String, message: String){
+        Log.d(tag, message)
+    }
+
+    //https://github.com/robotemi/sdk/blob/master/sample/src/main/java/com/robotemi/sdk/sample/MainActivity.kt
+    private fun requestAll() {
+        val permissions: MutableList<Permission> = ArrayList()
+        for (permission in Permission.values()) {
+            if (robot.checkSelfPermission(permission) == Permission.GRANTED) {
+                //printLog("You already had $permission permission.")
+                continue
+            }
+            permissions.add(permission)
+        }
+        robot.requestPermissions(permissions, 0) //REQUEST_CODE_NORMAL
     }
 
 }
