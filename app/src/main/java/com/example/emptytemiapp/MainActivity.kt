@@ -125,5 +125,12 @@ class MainActivity : AppCompatActivity(), OnRequestPermissionResultListener, OnS
         }
         robot.requestPermissions(permissions, 0) //REQUEST_CODE_NORMAL
     }
+    private fun requestPermissionIfNeeded(permission: Permission, requestCode: Int): Boolean {
+        if (robot.checkSelfPermission(permission) == Permission.GRANTED) {
+            return false
+        }
+        robot.requestPermissions(listOf(permission), requestCode)
+        return true
+    }
 
 }
