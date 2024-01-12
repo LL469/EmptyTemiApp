@@ -133,4 +133,32 @@ class MainActivity : AppCompatActivity(), OnRequestPermissionResultListener, OnS
         return true
     }
 
+    // VIEWS
+
+    fun kioskButtonOnClick(view: View) {
+        val boolean = robot.isKioskModeOn()
+        if(boolean){
+            robot.setKioskModeOn(false)
+            Toast.makeText(this, "kiosk mode OFF", Toast.LENGTH_SHORT).show()
+        }else{
+            robot.setKioskModeOn(true)
+            Toast.makeText(this, "kiosk mode ON", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun permissionsButtonOnClick(view: View) {
+        val permissions: MutableList<Permission> = ArrayList()
+        for (permission in Permission.values()) {
+            if (robot.checkSelfPermission(permission) == Permission.GRANTED) {
+                continue
+            }
+            permissions.add(permission)
+        }
+        robot.requestPermissions(permissions, 1)
+    }
+
+    fun speakButtonOnClick(view: View) {
+        robot.speak(create("Hello", false, TtsRequest.Language.EN_US, true, false))
+    }
+
 }
